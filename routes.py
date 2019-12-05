@@ -1,6 +1,12 @@
 
 from flask import Flask
 
+
+
+# @app.route('/')
+#     def index():
+#         return render_template('index.html')
+
 #route for reservation\
 
 @app.route("/reservation/add")

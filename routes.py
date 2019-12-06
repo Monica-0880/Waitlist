@@ -57,9 +57,16 @@ def delete_reservation(id):
     pass
 
 #route for Restaurant
+<<<<<<< HEAD
+@app.route("/restaurant/add", methods=["POST"])
+    def add_reservation():
+        
+        
+=======
 @app.route("/restaurant/add")
 def add_reservation():
     pass
+>>>>>>> origin
 
 @app.route("/restaurant/update/<id>", methods=["GET", "POST"])
 def update_reservation(id):
@@ -72,8 +79,13 @@ def delete_reservation(id):
 
 #route for SeatingReservations
 @app.route("/Seating_reservations/add")
+<<<<<<< HEAD
+    def add_reservation():
+        pass
+=======
 def add_reservation():
     pass
+>>>>>>> origin
 
 @app.route("/Seating_reservations/delete/<id>")
 def delete_reservation(id):

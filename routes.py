@@ -57,9 +57,10 @@ from flask import Flask
         pass
 
 #route for Restaurant
-    @app.route("/restaurant/add")
+@app.route("/restaurant/add", methods=["POST"])
     def add_reservation():
-        pass
+        
+        
 
 @app.route("/restaurant/update/<id>", methods=["GET", "POST"])
     def update_reservation(id):
@@ -71,7 +72,7 @@ from flask import Flask
 
 
 #route for SeatingReservations
-   @app.route("/Seating_reservations/add")
+@app.route("/Seating_reservations/add")
     def add_reservation():
         pass
 

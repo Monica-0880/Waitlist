@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, login_required, logout_user
-from Waitlist.models import Restaurant, Customer, Reservation
+from Waitlist.models import Restaurant, Customer, Reservation, Seating_table
 from Waitlist import app
 from Waitlist.forms import LoginForm
 from Waitlist import db
@@ -12,9 +12,10 @@ from Waitlist.forms import RegistrationForm
 @app.route('/index')
 @login_required
 def index():
+    allSeatingTables = Seating_table.query.filter(Customer.restaurant_id == current_user.id).all()
     allCustomers = Customer.query.filter(Customer.restaurant_id == current_user.id).all()
     allReservations = Reservation.query.filter(Reservation.restaurant_id == current_user.id).all()
-    return render_template('index.html', customers = allCustomers, reservations = allReservations)
+    return render_template('index.html', customers = allCustomers, reservations = allReservations, seatingTables = allSeatingTables)
 
 
 # LOGIN
@@ -114,21 +115,33 @@ def delete_reservation(id):
     return redirect('/')
 
 #route for seatingTables
-@app.route("/seating_tables/add")
+@app.route("/seating_tables/add", methods=['POST'])
 def add_seating_tables():
-    pass
+    table_number = request.form["tablenum"]
+    table_seats = request.form["seatsnum"]
+    restaurant  = Restaurant.query.get(current_user.id)
+
+    seating = Seating_table(table_number,table_seats,restaurant)
+    db.session.add(seating)
+    db.session.commit()
+    return redirect("/index")
 
 @app.route("/seating_tables/<id>")
 def get_seating_tables(id):
-    pass
+    allSeatingTable = Seating_table.query.get(id)
+    return render_template('/seating_table/seatingtables_view.html', seatingtable = allSeatingTable)
+
 
 @app.route("/seating_tables/update/<id>", methods=["GET", "POST"])
 def update_seating_tables(id):
     pass
 
-@app.route("/seating_tables/delete/<id>")
+@app.route("/seating_tables/delete/<id>", methods=['POST'])
 def delete_seating_tables(id):
-    pass
+    thisSeatingTable = Seating_table.query.get(id)
+    db.session.delete(thisSeatingTable)
+    db.session.commit()
+    return redirect('/')
 
 
 #route for customer 
@@ -147,26 +160,29 @@ def add_customer():
 
 @app.route("/customer/update/<id>", methods=["GET", "POST"])
 def update_customer(id):
-    thisCustomers = Customer.query.get(id)
-    return render_template('customer/customer_edit.html', customer = thisCustomers)
-
-    thisCustomers.name = request.form.get["custName"]
+    thisCustomer = Customer.query.get(id)
+    return render_template('customer/customer_edit.html', customer = thisCustomer)
+# {{ url_for('update_customer', id=reservation.customer_id )}}
+    # thisCustomer.name = request.form.get["custName"]
     # oldcustomer_name = Customer.query.filter_by(id=1).first()
     # customer.update({ 'oldcustomer_name' : 'newcustomer_name'})
     
-    newcustomer_phone = int(request.form["custTel"])
+    # newcustomer_phone = int(request.form["custTel"])
 
-    newcustomer_email = request.form["custEmail"]
+    # newcustomer_email = request.form["custEmail"]
 
-    db.session.commit()
-    return redirect("/index")
+    # db.session.commit()
+    # return redirect("/index")
     
 
 
 
-@app.route("/customer/delete/<id>")
+@app.route("/customer/delete/<id>", methods=['POST'])
 def delete_customer(id):
-    pass
+    thisCustomer = Customer.query.get(id)
+    db.session.delete(thisCustomer)
+    db.session.commit()
+    return redirect('/')
 
 #route for Restaurant
 # @app.route("/restaurant/add", methods=["POST"])

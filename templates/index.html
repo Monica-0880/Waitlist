@@ -6,15 +6,28 @@
     <div class="row">
         <div class="col-sm-8">
             <h2>Tables</h2>
+            <form action="/seating_tables/add" method="POST">
+                <label>Tables Number</label>
+                <input type="number" name="tablenum" id="">
+                <br>
+                <label>Number of Seats</label>
+                <input type="number" name="seatsnum" id="">
+                <br>
+                <input type="submit" value="create Tables">
+            </form>
+
             <hr>
-            {% for i in range( 10 ) %}
+            {% for seatingtable in seatingTables %}
                 <div class="card" style="width: 32.7%; display: inline-block;">
                     <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                      <p class="card-text">seats: </p>
-                      <a href="#" class="card-link">Card link</a>
-                      <a href="#" class="card-link">Another link</a>
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Table Num: {{seatingtable.table_number}} </p>
+                        <p class="card-text">seats: {{seatingtable.seats}} </p>
+                        <a href="/seating_tables/{{seatingtable.id}}" class="card-link">Card link</a>
+                        <form action="/seating_tables/delete/{{seatingtable.id}}" method='POST'>
+                            <input type="submit" value="Delete">
+                        </form>
                     </div>
                 </div>
             {% endfor %}
@@ -64,10 +77,10 @@
                         <span style="font-size: 10px;">{{reservation.status}}</span>
                         <a href="{{ url_for('update_reservation', id=reservation.id )}}">Update</a>
                         <a href="{{ url_for('get_reservation', id=reservation.id )}}">view</a>
-                        <a href="{{ url_for('update_customer', id=reservation.customer_id )}}">Edit Customer</a>
+                        <a href="{{ url_for('update_customer', id=reservation.customer.id )}}">Edit Customer</a>
                         <form method="POST" action="/reservation/delete/{{reservation.id}}">
                             <input type="submit" value="Delete">
-                          </form>
+                        </form>
                     </p>
                         
                 {% endfor %}

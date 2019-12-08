@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>
+    {{customer.name}}
+    <br>
+    {{customer.phone_number}}
+    <br>
+    {{customer.email}}
+</h3>
+<h2>Customer</h2>
+<form action="/customer/update/{{customer.id}}" method="POST">
+    <label>Name</label>
+    <br>
+    <input type="text" name="custName" id="">
+    <br>
+    <label>Phone</label>
+    <br>
+    <input type="tel" name="custTel" id="">
+    <br>
+    <label>Email</label>
+    <br>
+    <input type="email" name="custEmail" id="">
+    <br>
+    <input type="submit" value="update customer">
+</form>
+
+{% endblock %}
+

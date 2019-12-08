@@ -89,22 +89,29 @@ def get_reservation(id):
 @app.route("/reservation/update/<id>", methods=["GET", "POST"])
 @login_required
 def update_reservation(id):
+    
     thisReservationAllCustomers = Customer.query.filter(Customer.restaurant_id == current_user.id).all()
     thisReservation = Reservation.query.get(id)
     return render_template("reservation/reservation_update.html", reservation = thisReservation, customers = thisReservationAllCustomers)
     
-    customer = Customer.query.get(int(request.form["customer"]))
-    numberOfseats = request.form["numOfPeople"]
-    newdateAndTime = request.form.get["dateime"]
-    olddateAndTime = Reservation.query.filter_by(id=id)
-    # dateAndTime.update({olddateAndTime.reservation_time: newdateAndTime})
-    olddateAndTime.reservation_time = newdateAndTime
-    db.session.commit()
-    return redirect(url_for('index'))
+    # customer = Customer.query.get(int(request.form["customer"]))
+    # numberOfseats = request.form["numOfPeople"]
+    # newdateAndTime = request.form.get["dateime"]
+    # olddateAndTime = Reservation.query.filter_by(id=id)
 
-@app.route("/reservation/delete/<id>")
+    # dateAndTime.update({olddateAndTime.reservation_time: newdateAndTime})
+
+    # olddateAndTime.reservation_time = newdateAndTime
+    # db.session.commit()
+    # return redirect('/index')
+
+@app.route("/reservation/delete/<id>", methods=["POST"])
+@login_required
 def delete_reservation(id):
-    pass
+    thisReservation = Reservation.query.get(id)
+    db.session.delete(thisReservation)
+    db.session.commit()
+    return redirect('/')
 
 #route for seatingTables
 @app.route("/seating_tables/add")
@@ -125,26 +132,50 @@ def delete_seating_tables(id):
 
 
 #route for customer 
-@app.route("/customer/add")
+@app.route("/customer/add", methods=["POST"])
+@login_required
 def add_customer():
-    pass
+    customer_name = request.form["custName"]
+    customer_phone = int(request.form["custTel"])
+    customer_email = request.form["custEmail"]
+    restaurant  = Restaurant.query.get(current_user.id)
+
+    customer = Customer(customer_name,customer_phone,customer_email,restaurant)
+    db.session.add(customer)
+    db.session.commit()
+    return redirect("/index")
 
 @app.route("/customer/update/<id>", methods=["GET", "POST"])
 def update_customer(id):
-    pass
+    thisCustomers = Customer.query.get(id)
+    return render_template('customer/customer_edit.html', customer = thisCustomers)
+
+    thisCustomers.name = request.form.get["custName"]
+    # oldcustomer_name = Customer.query.filter_by(id=1).first()
+    # customer.update({ 'oldcustomer_name' : 'newcustomer_name'})
+    
+    newcustomer_phone = int(request.form["custTel"])
+
+    newcustomer_email = request.form["custEmail"]
+
+    db.session.commit()
+    return redirect("/index")
+    
+
+
 
 @app.route("/customer/delete/<id>")
 def delete_customer(id):
     pass
 
 #route for Restaurant
-@app.route("/restaurant/add", methods=["POST"])
-def add_restaurant():
-    pass
+# @app.route("/restaurant/add", methods=["POST"])
+# def add_restaurant():
+#     pass
 
-@app.route("/restaurant/update/<id>", methods=["GET", "POST"])
-def update_restaurant(id):
-    pass
+# @app.route("/restaurant/update/<id>", methods=["GET", "POST"])
+# def update_restaurant(id):
+#     pass
 
 @app.route("/restaurant/delete/<id>")
 def delete_restaurant(id):

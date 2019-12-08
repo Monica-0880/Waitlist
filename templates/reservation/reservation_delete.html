@@ -1,0 +1,10 @@
+
+
+<form method="POST" action="/reservation/delete/{{reservation.id}}">
+    <h1> 
+            {{reservation.customer.name}} <br>
+            <span>{{reservation.reservation_time}}</span> <br>
+            <span>{{reservation.status}}</span>
+    </h1>
+    <input type="submit" value="Delete">
+  </form>

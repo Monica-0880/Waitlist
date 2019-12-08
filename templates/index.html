@@ -22,7 +22,7 @@
         <div class="col-sm-4">
                 <div class="col-4">
                         <h2>Customer</h2>
-                        <form action="post">
+                        <form action="/customer/add" method="POST">
                             <label>Name</label>
                             <br>
                             <input type="text" name="custName" id="">
@@ -34,6 +34,7 @@
                             <label>Email</label>
                             <br>
                             <input type="email" name="custEmail" id="">
+                            <input type="submit" value="create customer">
                         </form>
             <h2>Reservations</h2>
             <hr>
@@ -63,6 +64,10 @@
                         <span style="font-size: 10px;">{{reservation.status}}</span>
                         <a href="{{ url_for('update_reservation', id=reservation.id )}}">Update</a>
                         <a href="{{ url_for('get_reservation', id=reservation.id )}}">view</a>
+                        <a href="{{ url_for('update_customer', id=reservation.customer_id )}}">Edit Customer</a>
+                        <form method="POST" action="/reservation/delete/{{reservation.id}}">
+                            <input type="submit" value="Delete">
+                          </form>
                     </p>
                         
                 {% endfor %}

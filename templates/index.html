@@ -58,12 +58,13 @@
             <div>
                 {% for reservation in reservations %}
                     <p> 
-                        <br>
+                        {{reservation.customer.name}} <br>
                         <span style="font-size: 10px;">{{reservation.reservation_time}}</span> <br>
                         <span style="font-size: 10px;">{{reservation.status}}</span>
+                        <a href="{{ url_for('update_reservation', id=reservation.id )}}">Update</a>
+                        <a href="{{ url_for('get_reservation', id=reservation.id )}}">view</a>
                     </p>
-                        <a href="#">Update</a>
-                        <a href="{{ url_for('get_reservation', id=reservation.id)}}">view</a>
+                        
                 {% endfor %}
             </div>
 

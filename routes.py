@@ -12,7 +12,6 @@ from Waitlist.forms import RegistrationForm
 @app.route('/index')
 @login_required
 def index():
-    r = current_user.id
     allCustomers = Customer.query.filter(Customer.restaurant_id == current_user.id).all()
     allReservations = Reservation.query.filter(Reservation.restaurant_id == current_user.id).all()
     return render_template('index.html', customers = allCustomers, reservations = allReservations)
@@ -78,20 +77,30 @@ def add_reservation():
     reservation= Reservation(dateAndTime,status,restaurant,customer)
     db.session.add(reservation)
     db.session.commit()
-    return redirect("/")
+    return redirect("/index")
 
 @app.route("/reservation/<id>", methods=["GET"])
 @login_required
 def get_reservation(id):
-    # customer = Reservation.query.get(int(Reservation.id))
-    reservation = Reservation.query.filter_by(id=id).first_or_404
-    return render_template("reservation/reservation_view.html", reservation=reservation)
+    thisReservation = Reservation.query.get(id)
+    return render_template("reservation/reservation_view.html", reservation = thisReservation)
 
 
 @app.route("/reservation/update/<id>", methods=["GET", "POST"])
+@login_required
 def update_reservation(id):
-    reservation = Reservation.query.filter_by(id=id).first_or_404
-    return render_template("reservation/reservation_view.html", reservation=reservation)
+    thisReservationAllCustomers = Customer.query.filter(Customer.restaurant_id == current_user.id).all()
+    thisReservation = Reservation.query.get(id)
+    return render_template("reservation/reservation_update.html", reservation = thisReservation, customers = thisReservationAllCustomers)
+    
+    customer = Customer.query.get(int(request.form["customer"]))
+    numberOfseats = request.form["numOfPeople"]
+    newdateAndTime = request.form.get["dateime"]
+    olddateAndTime = Reservation.query.filter_by(id=id)
+    # dateAndTime.update({olddateAndTime.reservation_time: newdateAndTime})
+    olddateAndTime.reservation_time = newdateAndTime
+    db.session.commit()
+    return redirect(url_for('index'))
 
 @app.route("/reservation/delete/<id>")
 def delete_reservation(id):

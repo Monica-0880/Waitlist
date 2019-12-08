@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<h1> 
+        {{reservation.customer.name}} <br>
+        <span>{{reservation.reservation_time}}</span> <br>
+        <span>{{reservation.status}}</span>
+    </h1>
+    
+    <form action="/reservation/update/{{reservation.id}}" method="POST">
+        <label>How many People?</label><br>
+        <input type="number" name="numOfPeople" id=""><br>
+        
+        <label>Time of reservation</label><br>
+        <input type="datetime-local" name="dateime" id=""><br>
+
+        <label>Customer</label><br>
+        <select name="customer" id="">
+            {% for customer in customers %}
+                {{ customer }}
+                <option value="{{customer.id}}"> {{customer.name}} </option>
+            {% endfor %}
+        </select><br>
+
+        <input type="submit" value="update reservation">
+    </form>
+
+
+{% endblock %}

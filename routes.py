@@ -12,8 +12,9 @@ from Waitlist.forms import RegistrationForm
 @app.route('/index')
 @login_required
 def index():
-    allCustomers = Customer.query.all()
-    allReservations = Reservation.query.all()
+    r = current_user.id
+    allCustomers = Customer.query.filter(Customer.restaurant_id == current_user.id).all()
+    allReservations = Reservation.query.filter(Reservation.restaurant_id == current_user.id).all()
     return render_template('index.html', customers = allCustomers, reservations = allReservations)
 
 
@@ -71,7 +72,7 @@ def add_reservation():
     customer = Customer.query.get(int(request.form["customer"]))
     numberOfseats = request.form["numOfPeople"]
     dateAndTime = request.form["dateTime"]
-    restaurant  = Restaurant.query.get(1)
+    restaurant  = Restaurant.query.get(current_user.id)
     status = "pending"
 
     reservation= Reservation(dateAndTime,status,restaurant,customer)

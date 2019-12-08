@@ -1,28 +1,78 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action = "/form-submit" method="GET">
 
-        <label for="companyname">Company Name</label>
-        <br>
-        <input type="text" name="companyname" id="companyname" placeholder="company Name">
-        <br>
-        <label for="user">Username</label>
-        <br>
-        <input type="text" name="username" id="user" placeholder="username">
-        <br>
-        <label for="password">Password</label>
-        <br>
-        <input type="text" name="password" id="password" placeholder="password">
-        <br>
-        <input type="submit"value="Submit">
-    
-    </form>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <h2>Tables</h2>
+            <hr>
+            {% for i in range( 10 ) %}
+                <div class="card" style="width: 32.7%; display: inline-block;">
+                    <div class="card-body">
+                      <h5 class="card-title">Card title</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                      <p class="card-text">seats: </p>
+                      <a href="#" class="card-link">Card link</a>
+                      <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-sm-4">
+                <div class="col-4">
+                        <h2>Customer</h2>
+                        <form action="post">
+                            <label>Name</label>
+                            <br>
+                            <input type="text" name="custName" id="">
+                            <br>
+                            <label>Phone</label>
+                            <br>
+                            <input type="tel" name="custTel" id="">
+                            <br>
+                            <label>Email</label>
+                            <br>
+                            <input type="email" name="custEmail" id="">
+                        </form>
+            <h2>Reservations</h2>
+            <hr>
+            <form action="/reservation/add" method="POST">
+                <label>How many People?</label><br>
+                <input type="number" name="numOfPeople" id=""><br>
+                
+                <label>Time of reservation</label><br>
+                <input type="datetime-local" name="dateTime" id=""><br>
 
+                <label>Customer</label><br>
+                <select name="customer" id="">
+                    {% for customer in customers %}
+                        {{ customer }}
+                        <option value="{{customer.id}}"> {{customer.name}} </option>
+                    {% endfor %}
+                </select><br>
 
+                <input type="submit" value="create reservation">
+            </form>
+            <hr>
+            <div>
+                {% for reservation in reservations %}
+                    <p> 
+                        {{reservation.customer.name}} <br>
+                        <span style="font-size: 10px;">{{reservation.reservation_time}}</span> <br>
+                        <span style="font-size: 10px;">{{reservation.status}}</span>
+                    </p>
+                        <a href="#">Update</a>
+                        <a href="{{ url_for('get_reservation', id=reservation.id)}}">view</a>
+                {% endfor %}
+            </div>
 
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}
+
 
 

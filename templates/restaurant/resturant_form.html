@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action = "/submit_resturant" method="POST">
+
+    <label for="companyname">Company Name</label>
+    <br>
+    <input type="text" name="companyName" id="companyname" placeholder="company Name">
+    <br>
+    <label for="user">Username</label>
+    <br>
+    <input type="text" name="userName" id="user" placeholder="username">
+    <br>
+    <label for="password">Password</label>
+    <br>
+    <input type="text" name="password" id="password" placeholder="password">
+    <br>
+    <input type="submit" value="Submit">
+
+</form>
+{% endblock %}

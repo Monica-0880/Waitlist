@@ -161,18 +161,25 @@ def add_customer():
 @app.route("/customer/update/<id>", methods=["GET", "POST"])
 def update_customer(id):
     thisCustomer = Customer.query.get(id)
-    return render_template('customer/customer_edit.html', customer = thisCustomer)
-# {{ url_for('update_customer', id=reservation.customer_id )}}
-    # thisCustomer.name = request.form.get["custName"]
-    # oldcustomer_name = Customer.query.filter_by(id=1).first()
-    # customer.update({ 'oldcustomer_name' : 'newcustomer_name'})
+
+    if request.method == "GET":
+        return render_template('customer/customer_edit.html', customer = thisCustomer)
+        # {{ url_for('update_customer', id=reservation.customer_id )}}
     
-    # newcustomer_phone = int(request.form["custTel"])
+    if request.method == "POST":
+        name = request.form.get("custName")
+        phone_number = request.form.get("custTel")
+        email = request.form.get("custEmail")
 
-    # newcustomer_email = request.form["custEmail"]
+        if name != "":
+            thisCustomer.name = name
+        if phone_number != "":
+            thisCustomer.phone_number = phone_number
+        if email != "":
+            thisCustomer.email = email
 
-    # db.session.commit()
-    # return redirect("/index")
+        db.session.commit()
+        return redirect("/index")
     
 
 

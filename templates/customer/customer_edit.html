@@ -12,15 +12,15 @@
 <form action="/customer/update/{{customer.id}}" method="POST">
     <label>Name</label>
     <br>
-    <input type="text" name="custName" id="">
+    <input type="text" name="custName" required id="">
     <br>
     <label>Phone</label>
     <br>
-    <input type="tel" name="custTel" id="">
+    <input type="tel" name="custTel" required id="">
     <br>
     <label>Email</label>
     <br>
-    <input type="email" name="custEmail" id="">
+    <input type="email" name="custEmail" required id="">
     <br>
     <input type="submit" value="update customer">
 </form>

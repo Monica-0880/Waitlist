@@ -136,7 +136,7 @@ def get_seating_tables(id):
 def update_seating_tables(id):
     pass
 
-@app.route("/seating_tables/delete/<id>", methods=['POST'])
+@app.route("/seating_tables/delete/<id>")
 def delete_seating_tables(id):
     thisSeatingTable = Seating_table.query.get(id)
     db.session.delete(thisSeatingTable)
@@ -184,7 +184,7 @@ def update_customer(id):
 
 
 
-@app.route("/customer/delete/<id>", methods=['POST'])
+@app.route("/customer/delete/<id>")
 def delete_customer(id):
     thisCustomer = Customer.query.get(id)
     db.session.delete(thisCustomer)

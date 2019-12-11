@@ -45,7 +45,7 @@
     {% endwith %}
 
 
-    <div class="container">
+    <div class="container" style="margin: 20px auto 200px;">
       <div class="row">
         <div class="col-sm-12">
           {% block content %}{% endblock %}
@@ -151,5 +151,21 @@
   crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        $('.matches').click( function() {
+            thisSeats = parseInt( $(this).data('seats') );
+            var allReservations = $('.reservation');
+            
+            $('.reservation').removeClass('highlighted');
+
+            allReservations.each(function(item){
+              seats = parseInt( $(allReservations[item])[0].dataset.seats );
+              if( seats <= thisSeats ){
+                $(allReservations[item]).addClass('highlighted');
+              }
+            })
+        });
+    </script>
 </body>
 </html>

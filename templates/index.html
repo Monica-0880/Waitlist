@@ -29,6 +29,15 @@
         display: inline-block;
         float: right;
     }
+    .matches{
+        font-size: 10px;
+        text-decoration: underline;
+        color: orange;
+        cursor: pointer;
+    }
+    .highlighted {
+        background-color: pink;
+    }
 </style>
 
 <div class="container">
@@ -42,14 +51,29 @@
             {% for seatingtable in seatingTables %}
                 <div class="card" style="width: 32.7%; display: inline-block;">
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Table Num: {{seatingtable.table_number}} </p>
-                        <p class="card-text">seats: {{seatingtable.seats}} </p>
-                        <a href="/seating_tables/{{seatingtable.id}}" class="card-link">Card link</a>
-                        <form action="/seating_tables/delete/{{seatingtable.id}}" method='POST'>
-                            <input type="submit" value="Delete">
-                        </form>
+                        <h5 class="card-title">
+                            Table Num: {{seatingtable.table_number}} <hr>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted"></h6>
+                        <div class="card-text">
+                            Seats: {{seatingtable.seats}} 
+                            <span class="matches" data-seats="{{ seatingtable.seats }}">( matches )</span>
+                            <br>
+                            Status: 
+                            {% if seatingtable.seating_reservations|length > 0 %}
+                                Seated
+                                <br>
+                                <a href="/seating_tables/clear/{{seatingtable.id}}" class="card-link">Clear Table</a>
+                            {% else %}
+                                Empty
+                                <br>
+                                <a href="/seating_reservation/add/{{seatingtable.id}}" class="card-link">+ Reservation</a>
+                            {% endif %}
+                            <hr>
+                            <a href="/seating_tables/delete/{{seatingtable.id}}" class="warning" onclick="alert('Are you sure you want to delete this reservation?')">
+                                delete
+                            </a>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
@@ -61,17 +85,16 @@
             <h3>Reservations:</h3>
             {% if reservations|length > 0 %}
                 {% for reservation in reservations %}
-                    <div class="reservation">
+                    <div class="reservation" data-seats="{{reservation.number_people}}12">
                         Reservation for 
                         <a href="/customer/{{reservation.customer.id}}">
                             {{reservation.customer.name}}
                         </a> at 
                         <span style="font-size: 10px;">{{reservation.reservation_time}}</span> <br>
+                        <span style="font-size: 12px;"></span>seats required: {{reservation.number_people}}</span> <br>
                         <div class="pill {{reservation.status}}">{{reservation.status}}</div><br>
                         <div class="reservation_settings">
                             <a href="{{ url_for('update_reservation', id=reservation.id )}}">Update</a>
-                            <!-- <a href="{{ url_for('get_reservation', id=reservation.id )}}">view</a> -->
-                            <!-- <a href="{{ url_for('update_customer', id=reservation.customer.id )}}">Edit Customer</a> -->
                             <a class="warning" href="/reservation/delete/{{reservation.id}}" 
                                onclick="alert('Are you sure you want to delete this reservation?')" >
                                 delete
@@ -198,6 +221,5 @@
 
 
 {% endblock %}
-
 
 

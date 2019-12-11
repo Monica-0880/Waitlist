@@ -5,16 +5,9 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
-            <h2>Tables</h2>
-            <form action="/seating_tables/add" method="POST">
-                <label>Tables Number</label>
-                <input type="number" name="tablenum" id="">
-                <br>
-                <label>Number of Seats</label>
-                <input type="number" name="seatsnum" id="">
-                <br>
-                <input type="submit" value="create Tables">
-            </form>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addATable">
+               + Add Table
+            </button>
 
             <hr>
             {% for seatingtable in seatingTables %}
@@ -33,24 +26,83 @@
             {% endfor %}
         </div>
         <div class="col-sm-4">
-                <div class="col-4">
-                        <h2>Customer</h2>
-                        <form action="/customer/add" method="POST">
-                            <label>Name</label>
-                            <br>
-                            <input type="text" name="custName" id="">
-                            <br>
-                            <label>Phone</label>
-                            <br>
-                            <input type="tel" name="custTel" id="">
-                            <br>
-                            <label>Email</label>
-                            <br>
-                            <input type="email" name="custEmail" id="">
-                            <input type="submit" value="create customer">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addACustomer">+ Add Customer</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAReservation">+ Add Reservation</button>
+            <hr> 
+            <h3>Reservations:</h3>
+            {% if reservations|length > 0 %}
+                {% for reservation in reservations %}
+                    <p> 
+                        Reservation for 
+                        <a href="/customer/{{reservation.customer.id}}">
+                            {{reservation.customer.name}}
+                        </a><br>
+                        <span style="font-size: 10px;">{{reservation.reservation_time}}</span> <br>
+                        <span style="font-size: 10px;">{{reservation.status}}</span>
+                        <a href="{{ url_for('update_reservation', id=reservation.id )}}">Update</a>
+                        <a href="{{ url_for('get_reservation', id=reservation.id )}}">view</a>
+                        <a href="{{ url_for('update_customer', id=reservation.customer.id )}}">Edit Customer</a>
+                        <form method="POST" action="/reservation/delete/{{reservation.id}}">
+                            <input type="submit" value="Delete">
                         </form>
-            <h2>Reservations</h2>
-            <hr>
+                    </p> 
+                {% endfor %}
+            {% else %}
+                <h4>No Reservations</h4>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- MODALS -->
+
+
+<!-- Add Table -->
+<div class="modal fade" id="addATable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add a Table</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="/seating_tables/add" method="POST">
+                <label>Tables Number</label>
+                <input type="number" name="tablenum" id="">
+                <br>
+                <label>Number of Seats</label>
+                <input type="number" name="seatsnum" id="">
+                <br>
+                <input type="submit" value="create Tables">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Add Reservation -->
+<div class="modal fade" id="addAReservation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add a Reservation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
             <form action="/reservation/add" method="POST">
                 <label>How many People?</label><br>
                 <input type="number" name="numOfPeople" id=""><br>
@@ -68,24 +120,46 @@
 
                 <input type="submit" value="create reservation">
             </form>
-            <hr>
-            <div>
-                {% for reservation in reservations %}
-                    <p> 
-                        {{reservation.customer.name}} <br>
-                        <span style="font-size: 10px;">{{reservation.reservation_time}}</span> <br>
-                        <span style="font-size: 10px;">{{reservation.status}}</span>
-                        <a href="{{ url_for('update_reservation', id=reservation.id )}}">Update</a>
-                        <a href="{{ url_for('get_reservation', id=reservation.id )}}">view</a>
-                        <a href="{{ url_for('update_customer', id=reservation.customer.id )}}">Edit Customer</a>
-                        <form method="POST" action="/reservation/delete/{{reservation.id}}">
-                            <input type="submit" value="Delete">
-                        </form>
-                    </p>
-                        
-                {% endfor %}
-            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
 
+
+
+
+<!-- Add Customer -->
+<div class="modal fade" id="addACustomer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add a Customer</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="/customer/add" method="POST">
+                <label>Name</label>
+                <br>
+                <input type="text" name="custName" id="">
+                <br>
+                <label>Phone</label>
+                <br>
+                <input type="tel" name="custTel" id="">
+                <br>
+                <label>Email</label>
+                <br>
+                <input type="email" name="custEmail" id="">
+                <input type="submit" value="create customer">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
         </div>
     </div>
 </div>

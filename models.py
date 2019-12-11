@@ -45,16 +45,19 @@ class Reservation(db.Model):
     id = db.Column( db.Integer, primary_key=True )
     reservation_time = db.Column( db.String(120))
     status = db.Column( db.String(120))
+    number_people = db.Column(db.Integer)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
     seating_reservations = db.relationship( 'Seating_reservation', backref= 'reservation')
 
 
-    def __init__(self, reservation_time, status, restaurant, customer):
+    def __init__(self, reservation_time, status, restaurant, customer, number_people):
         self.reservation_time = reservation_time
         self.status = status
+        self.number_people
         self.restaurant = restaurant
         self.customer = customer
+        
 
 
 # Seating table model   

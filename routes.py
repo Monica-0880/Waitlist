@@ -93,18 +93,26 @@ def update_reservation(id):
     
     thisReservationAllCustomers = Customer.query.filter(Customer.restaurant_id == current_user.id).all()
     thisReservation = Reservation.query.get(id)
-    return render_template("reservation/reservation_update.html", reservation = thisReservation, customers = thisReservationAllCustomers)
+    if request.method == "GET":
+        return render_template("reservation/reservation_update.html", reservation = thisReservation, customers = thisReservationAllCustomers)
+
+    if request.method == "POST":
+        
+        customer = Customer.query.get(int(request.form["customer"])).id
+        numberOfseats = request.form.get("numOfPeople")
+        dateAndTime = request.form.get("dateime")
+
+        if dateAndTime != "":
+            thisReservation.reservation_time = dateAndTime
+
+        if customer != "":
+            thisReservation.customer_id = customer
+
+        
+        db.session.commit()
+        return redirect("/index")
     
-    # customer = Customer.query.get(int(request.form["customer"]))
-    # numberOfseats = request.form["numOfPeople"]
-    # newdateAndTime = request.form.get["dateime"]
-    # olddateAndTime = Reservation.query.filter_by(id=id)
-
-    # dateAndTime.update({olddateAndTime.reservation_time: newdateAndTime})
-
-    # olddateAndTime.reservation_time = newdateAndTime
-    # db.session.commit()
-    # return redirect('/index')
+    
 
 @app.route("/reservation/delete/<id>", methods=["POST"])
 @login_required
